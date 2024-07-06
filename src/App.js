@@ -6,7 +6,10 @@ import './App.css';
 function App() {
   return (
     <div className="App">
-      <NavPage />
+        <textarea>
+            hello!
+        </textarea>
+      {/*<NavPage />*/}
     </div>
   );
 }
