@@ -1,18 +1,25 @@
 {
   "files": {
-    "main.css": "/zhanghanjiao-react-games/static/css/main.435d5fe5.chunk.css",
-    "main.js": "/zhanghanjiao-react-games/static/js/main.01b01939.chunk.js",
-    "main.js.map": "/zhanghanjiao-react-games/static/js/main.01b01939.chunk.js.map",
-    "runtime~main.js": "/zhanghanjiao-react-games/static/js/runtime~main.d4299023.js",
-    "runtime~main.js.map": "/zhanghanjiao-react-games/static/js/runtime~main.d4299023.js.map",
-    "static/js/2.fd5371a8.chunk.js": "/zhanghanjiao-react-games/static/js/2.fd5371a8.chunk.js",
-    "static/js/2.fd5371a8.chunk.js.map": "/zhanghanjiao-react-games/static/js/2.fd5371a8.chunk.js.map",
-    "static/js/3.a29efab2.chunk.js": "/zhanghanjiao-react-games/static/js/3.a29efab2.chunk.js",
-    "static/js/3.a29efab2.chunk.js.map": "/zhanghanjiao-react-games/static/js/3.a29efab2.chunk.js.map",
+    "main.css": "/zhanghanjiao-react-games/static/css/main.fc3b3d91.chunk.css",
+    "main.js": "/zhanghanjiao-react-games/static/js/main.361df50a.chunk.js",
+    "main.js.map": "/zhanghanjiao-react-games/static/js/main.361df50a.chunk.js.map",
+    "runtime-main.js": "/zhanghanjiao-react-games/static/js/runtime-main.a8d28cf6.js",
+    "runtime-main.js.map": "/zhanghanjiao-react-games/static/js/runtime-main.a8d28cf6.js.map",
+    "static/js/2.3fe723f7.chunk.js": "/zhanghanjiao-react-games/static/js/2.3fe723f7.chunk.js",
+    "static/js/2.3fe723f7.chunk.js.map": "/zhanghanjiao-react-games/static/js/2.3fe723f7.chunk.js.map",
+    "static/js/3.b9a8dff3.chunk.js": "/zhanghanjiao-react-games/static/js/3.b9a8dff3.chunk.js",
+    "static/js/3.b9a8dff3.chunk.js.map": "/zhanghanjiao-react-games/static/js/3.b9a8dff3.chunk.js.map",
     "index.html": "/zhanghanjiao-react-games/index.html",
-    "precache-manifest.e483c0ef2621e785077bf3ffbc2fcf27.js": "/zhanghanjiao-react-games/precache-manifest.e483c0ef2621e785077bf3ffbc2fcf27.js",
+    "precache-manifest.94c90ddd8bbbaa6464e51bfb2907051c.js": "/zhanghanjiao-react-games/precache-manifest.94c90ddd8bbbaa6464e51bfb2907051c.js",
     "service-worker.js": "/zhanghanjiao-react-games/service-worker.js",
-    "static/css/main.435d5fe5.chunk.css.map": "/zhanghanjiao-react-games/static/css/main.435d5fe5.chunk.css.map",
-    "static/media/logo.svg": "/zhanghanjiao-react-games/static/media/logo.06e73328.svg"
-  }
+    "static/css/main.fc3b3d91.chunk.css.map": "/zhanghanjiao-react-games/static/css/main.fc3b3d91.chunk.css.map",
+    "static/js/2.3fe723f7.chunk.js.LICENSE.txt": "/zhanghanjiao-react-games/static/js/2.3fe723f7.chunk.js.LICENSE.txt",
+    "static/media/NavPage.css": "/zhanghanjiao-react-games/static/media/border.2b5801f8.png"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.a8d28cf6.js",
+    "static/js/2.3fe723f7.chunk.js",
+    "static/css/main.fc3b3d91.chunk.css",
+    "static/js/main.361df50a.chunk.js"
+  ]
 }
