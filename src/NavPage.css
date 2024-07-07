@@ -1,12 +1,17 @@
-/* src/NavPage.css */
+/* src/TileMatching.css */
 * {
     margin: 0;
     padding: 0;
 }
 
 body {
-    background: linear-gradient(to bottom, #ccc, #fff);
+    background: url('./images/back.png') no-repeat center center fixed;
+    background-size: contain; /* 缩放背景图，使其完全显示在元素内 */
+    background-color: #B5BEBD; /* 设置背景颜色 */
     height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
 }
 
 .navbox {
@@ -29,7 +34,7 @@ ul.nav li {
 
 ul.nav li a {
     transition: all 0.3s ease-out;
-    background: #cbcbcb url(images/border.png) no-repeat;
+    background: #cbcbcb url(images/border.png) no-repeat;;
     color: #174867;
     padding: 7px 15px;
     border-top-right-radius: 10px;
@@ -40,7 +45,7 @@ ul.nav li a {
 }
 
 ul.nav li a:hover {
-    background: #ebebeb url(images/border.png) no-repeat;
+    background: #ebebeb;
     color: #67a5cd;
     padding-left: 30px;
 }

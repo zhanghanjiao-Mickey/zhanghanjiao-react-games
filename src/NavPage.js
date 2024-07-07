@@ -5,10 +5,15 @@ import './NavPage.css';
 const NavPage = () => {
   return (
     <div className="navbox">
-      <ul className="nav">
-        <li><a href="tile-matching/tile-matching.html">宠物连连看</a></li>
-        <li><a href="https://example.com">其他游戏</a></li>
-      </ul>
+        <ul className="nav">
+            <li><a href="/zhanghanjiao-reacg-games/Tile-matching">宠物连连看</a></li>
+            <li><a href="https://example.com">其他游戏</a></li>
+            <li><a href="https://example.com">其他游戏</a></li>
+            <li><a href="https://example.com">其他游戏</a></li>
+            <li><a href="https://example.com">其他游戏</a></li>
+            <li><a href="https://example.com">其他游戏</a></li>
+            <li><a href="https://example.com">其他游戏</a></li>
+        </ul>
     </div>
   );
 }

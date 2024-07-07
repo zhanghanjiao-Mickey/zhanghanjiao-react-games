@@ -1,16 +1,19 @@
-// src/App.js
 import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import NavPage from './NavPage';
+import TileMatching from './tileMatching/TileMatching';
 import './App.css';
 
 function App() {
   return (
-    <div className="App">
-        <textarea>
-            hello!
-        </textarea>
-      {/*<NavPage />*/}
-    </div>
+    <Router>
+      <div className="App">
+        <Routes>
+          <Route path="/zhanghanjiao-react-games" element={<NavPage />} />
+          <Route path="/zhanghanjiao-reacg-games/Tile-matching" element={<TileMatching />} />
+        </Routes>
+      </div>
+    </Router>
   );
 }
 
