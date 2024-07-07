@@ -122,7 +122,7 @@ const TileMatching = () => {
               <div
                 key={`${i}-${j}`}
                 className={`tile ${selectedTile && selectedTile.row === i && selectedTile.col === j ? 'selected' : ''}`}
-                style={{ backgroundImage: 'url(textures/' + number + '.png)'}}
+                style={{ backgroundImage: `url('textures/${number}.png')` }}
                 onClick={() => handleTileClick(i, j)}
                 data-row={i}
                 data-col={j}
