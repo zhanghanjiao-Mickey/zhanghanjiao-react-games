@@ -3,7 +3,7 @@
 }
 
 body {
-    background: #ebebeb;
+    background: #ffffff;
 }
 
 .header {
@@ -23,9 +23,10 @@ body {
 
 .board {
   display: grid;
-  grid-template-columns: repeat(14, 54px);
+  grid-template-columns: repeat(14  , 54px);
   gap: 5px;
   margin-top: 60px;
+  justify-content: center;
 }
 
 .tile {

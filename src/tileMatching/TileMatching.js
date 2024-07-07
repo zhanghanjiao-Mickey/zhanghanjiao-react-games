@@ -116,20 +116,26 @@ const TileMatching = () => {
         <button id="hint-button" onClick={handleHintButtonClick}>提示</button>
       </header>
       <div className="board" id="board">
-        {board.map((row, i) =>
-          row.map((number, j) => {
-            return (
-              <div
-                key={`${i}-${j}`}
-                className={`tile ${selectedTile && selectedTile.row === i && selectedTile.col === j ? 'selected' : ''}`}
-                style={{ backgroundImage: `url('textures/${number}.png')` }}
-                onClick={() => handleTileClick(i, j)}
-                data-row={i}
-                data-col={j}
-              />
-            );
-          })
-        )}
+{board.map((row, i) =>
+  row.map((number, j) => {
+    // 排除 i 和 j 等于 0 或等于 row.length - 1 的情况
+    if (i !== 0 && i !== board.length - 1 && j !== 0 && j !== row.length - 1) {
+      return (
+        <div
+          key={`${i}-${j}`}
+          className={`tile ${selectedTile && selectedTile.row === i && selectedTile.col === j ? 'selected' : ''}`}
+          style={{ backgroundImage: `url('textures/${number}.png')` }}
+          onClick={() => handleTileClick(i, j)}
+          data-row={i}
+          data-col={j}
+        />
+      );
+    } else {
+      return null; // 在排除的情况下返回 null 或其他占位符
+    }
+  })
+)}
+
       </div>
     </div>
   );
