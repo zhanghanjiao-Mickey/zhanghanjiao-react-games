@@ -1,25 +1,17 @@
 {
   "files": {
-    "main.css": "/zhanghanjiao-react-games/static/css/main.fc3b3d91.chunk.css",
-    "main.js": "/zhanghanjiao-react-games/static/js/main.361df50a.chunk.js",
-    "main.js.map": "/zhanghanjiao-react-games/static/js/main.361df50a.chunk.js.map",
-    "runtime-main.js": "/zhanghanjiao-react-games/static/js/runtime-main.a8d28cf6.js",
-    "runtime-main.js.map": "/zhanghanjiao-react-games/static/js/runtime-main.a8d28cf6.js.map",
-    "static/js/2.3fe723f7.chunk.js": "/zhanghanjiao-react-games/static/js/2.3fe723f7.chunk.js",
-    "static/js/2.3fe723f7.chunk.js.map": "/zhanghanjiao-react-games/static/js/2.3fe723f7.chunk.js.map",
-    "static/js/3.b9a8dff3.chunk.js": "/zhanghanjiao-react-games/static/js/3.b9a8dff3.chunk.js",
-    "static/js/3.b9a8dff3.chunk.js.map": "/zhanghanjiao-react-games/static/js/3.b9a8dff3.chunk.js.map",
+    "main.css": "/zhanghanjiao-react-games/static/css/main.47e2d380.css",
+    "main.js": "/zhanghanjiao-react-games/static/js/main.94fe5730.js",
+    "static/js/453.6545556d.chunk.js": "/zhanghanjiao-react-games/static/js/453.6545556d.chunk.js",
+    "static/media/back.png": "/zhanghanjiao-react-games/static/media/back.4e6a8fa3d62cd26054a0.png",
+    "static/media/border.png": "/zhanghanjiao-react-games/static/media/border.d828b1412f1fe9326b04.png",
     "index.html": "/zhanghanjiao-react-games/index.html",
-    "precache-manifest.94c90ddd8bbbaa6464e51bfb2907051c.js": "/zhanghanjiao-react-games/precache-manifest.94c90ddd8bbbaa6464e51bfb2907051c.js",
-    "service-worker.js": "/zhanghanjiao-react-games/service-worker.js",
-    "static/css/main.fc3b3d91.chunk.css.map": "/zhanghanjiao-react-games/static/css/main.fc3b3d91.chunk.css.map",
-    "static/js/2.3fe723f7.chunk.js.LICENSE.txt": "/zhanghanjiao-react-games/static/js/2.3fe723f7.chunk.js.LICENSE.txt",
-    "static/media/NavPage.css": "/zhanghanjiao-react-games/static/media/border.2b5801f8.png"
+    "main.47e2d380.css.map": "/zhanghanjiao-react-games/static/css/main.47e2d380.css.map",
+    "main.94fe5730.js.map": "/zhanghanjiao-react-games/static/js/main.94fe5730.js.map",
+    "453.6545556d.chunk.js.map": "/zhanghanjiao-react-games/static/js/453.6545556d.chunk.js.map"
   },
   "entrypoints": [
-    "static/js/runtime-main.a8d28cf6.js",
-    "static/js/2.3fe723f7.chunk.js",
-    "static/css/main.fc3b3d91.chunk.css",
-    "static/js/main.361df50a.chunk.js"
+    "static/css/main.47e2d380.css",
+    "static/js/main.94fe5730.js"
   ]
 }
