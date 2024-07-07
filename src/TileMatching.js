@@ -146,6 +146,7 @@ const TileMatching = () => {
             <div className="board" id="board">
                 {board.map((row, i) =>
                     row.map((number, j) => {
+                        console.log('111');
                         // 排除 i 和 j 等于 0 或等于 row.length - 1 的情况
                         if (i !== 0 && i !== board.length - 1 && j !== 0 && j !== row.length - 1) {
                             return (
