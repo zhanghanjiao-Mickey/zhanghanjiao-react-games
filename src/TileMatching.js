@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import './TileMatching.css';
-import {apiUrl} from './config';
+import {apiUrl, Status} from './config';
 
 // 动态导入 textures 文件夹中的所有图片
 // const importAll = (r) => {
@@ -20,46 +20,46 @@ const TileMatching = () => {
     const [selectedTile, setSelectedTile] = useState(null);
     const [selectedCoords, setSelectedCoords] = useState(null);
     const [playerToken, setPlayerToken] = useState("");
-    const [level, setLevel] = useState(3);
+    const [level, setLevel] = useState(1);
 
 
-  useEffect(() => {
-    const fetchTokenAndInitGame = async () => {
-      try {
-        // Fetch the token
-        const tokenResponse = await fetch(`${apiUrl}/sys/login`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            // Add any other headers needed for login
-          },
-        });
-        const token = await tokenResponse.text();
-        console.log('Token fetched:', token);
-        setPlayerToken(token); // Save token to state
+    useEffect(() => {
+        const fetchTokenAndInitGame = async () => {
+            try {
+                // Fetch the token
+                const tokenResponse = await fetch(`${apiUrl}/sys/login`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        // Add any other headers needed for login
+                    },
+                });
+                const token = await tokenResponse.text();
+                console.log('Token fetched:', token);
+                setPlayerToken(token); // Save token to state
 
-        // Fetch game data using the token
-        const gameDataResponse = await fetch(`${apiUrl}/game/tile-matching/level/${level}/init`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Token-Player': token,
-          },
-        });
-        const gameData = await gameDataResponse.json();
-        console.log(gameData);
-        setLevelName(`Level 1: ${gameData.name}`);
-        setLives(gameData.life);
-        setHints(gameData.tips);
-        setTimer(gameData.time);
-        setBoard(gameData.matrix);
-      } catch (error) {
-        console.error('Error fetching token or game data:', error);
-      }
-    };
+                // Fetch game data using the token
+                const gameDataResponse = await fetch(`${apiUrl}/game/tile-matching/level/${level}/init`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Token-Player': token,
+                    },
+                });
+                const gameData = await gameDataResponse.json();
+                console.log(gameData);
+                setLevelName(`Level ${level} : ${gameData.name}`);
+                setLives(gameData.life);
+                setHints(gameData.tips);
+                setTimer(gameData.time);
+                setBoard(gameData.matrix);
+            } catch (error) {
+                console.error('Error fetching token or game data:', error);
+            }
+        };
 
-    fetchTokenAndInitGame();
-  }, []);
+        fetchTokenAndInitGame();
+    }, [level]);
 
     useEffect(() => {
         let timerInterval = null;
@@ -95,7 +95,14 @@ const TileMatching = () => {
                 .then(data => {
                     console.log('连接后');
                     console.log(data);
-                    if (!data.path || data.path.length === 0 || clickedNumber !== board[selectedCoords.row][selectedCoords.col]) {
+                    if (data.status === Status.CLEARED.code) {
+                        if(level < 10) {
+                            alert(`恭喜您通过第 ${level} 关！！`);
+                            setLevel(level + 1);
+                        }else{
+                            alert("您已通关！！");
+                        }
+                    } else if (!data.path || data.path.length === 0 || clickedNumber !== board[selectedCoords.row][selectedCoords.col]) {
                         setSelectedTile({row: i, col: j});
                     } else {
                         setTimer(prevTimer => (prevTimer + 1 <= 100 ? prevTimer + 1 : 100));
@@ -107,7 +114,7 @@ const TileMatching = () => {
                             newBoard = data.matrix;
                         } else {
                             data.path.forEach(coord => {
-                            newBoard[coord.row][coord.col] = 0;
+                                newBoard[coord.row][coord.col] = 0;
                             });
                         }
                         setBoard(newBoard);
@@ -146,7 +153,6 @@ const TileMatching = () => {
             <div className="board" id="board">
                 {board.map((row, i) =>
                     row.map((number, j) => {
-                        console.log('111');
                         // 排除 i 和 j 等于 0 或等于 row.length - 1 的情况
                         if (i !== 0 && i !== board.length - 1 && j !== 0 && j !== row.length - 1) {
                             return (

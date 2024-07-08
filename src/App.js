@@ -9,7 +9,7 @@ function App() {
     <Router>
       <div className="App">
         <Routes>
-          <Route path="/zhanghanjiao-react-games" element={<TileMatching />} />
+          <Route path="/" element={<TileMatching />} />
           <Route path="/Tile-matching" element={<TileMatching />} />
         </Routes>
       </div>

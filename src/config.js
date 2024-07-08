@@ -1,5 +1,5 @@
 // config.js
-export const apiUrl = 'http://47.95.10.230:9090';
+export const apiUrl = 'http://47.95.10.230:9090';   // 服务器
 export const playerToken = 'EqeCPHNfcC34FU7qC8J/5BJEjfZLcmKA4Nb36wa7ubd1ZeZO1ywgXhfPOhbKKR9D';
 
 export const Status = {

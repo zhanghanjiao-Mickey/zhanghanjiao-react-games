@@ -2,7 +2,7 @@
   "name": "react-gh-pages",
   "version": "0.1.0",
   "description": "使用react部署的游戏小网页 -- edit by zhj",
-  "homepage": "http://zhanghanjiao-Mickey.github.io/zhanghanjiao-react-games",
+  "homepage": ".",
   "private": true,
   "author": "zhanghanjiao",
   "dependencies": {
