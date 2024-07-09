@@ -1,15 +1,6 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import './TileMatching.css';
-import {apiUrl, Status} from './config';
-
-// 动态导入 textures 文件夹中的所有图片
-// const importAll = (r) => {
-//   let images = {};
-//   r.keys().forEach((item) => { images[item.replace('./', '')] = r(item); });
-//   return images;
-// };
-
-// const images = importAll(require.context('./textures', false, /\.(png|jpe?g|svg)$/));
+import { apiUrl, Status } from './config';
 
 const TileMatching = () => {
     const [globalToken, setGlobalToken] = useState('');
@@ -20,7 +11,7 @@ const TileMatching = () => {
     const [board, setBoard] = useState([]);
     const [selectedTile, setSelectedTile] = useState(null);
     const [selectedCoords, setSelectedCoords] = useState(null);
-    const [playerToken, setPlayerToken] = useState("");
+    const [playerToken, setPlayerToken] = useState('');
     const [level, setLevel] = useState(1);
     const [hintCoords, setHintCoords] = useState([]); // 新增状态用于存储提示返回的位置
 
@@ -37,10 +28,10 @@ const TileMatching = () => {
                 });
                 const responseData = await tokenResponse.json(); // 解析响应体为 JSON 数据
                 const token = responseData.token; // 获取 token 属性
-                console.log('tokenResponse', tokenResponse);
                 console.log('Token fetched:', token);
                 setPlayerToken(token); // Save token to state
 
+                // Fetch player data using the token
                 const gamePlayerResponse = await fetch(`${apiUrl}/game/tile-matching/init/player`, {
                     method: 'GET',
                     headers: {
@@ -65,18 +56,17 @@ const TileMatching = () => {
                 console.log(gameData);
                 setLevelName(`Level ${level} : ${gameData.name}`);
                 setTimer(gameData.time);
-                setBoard(gameData.matrix);
-
+                setBoard(gameData.matrix || []); // 确保 gameData.matrix 是一个数组
             } catch (error) {
                 console.error('Error fetching token or game data:', error);
             }
         };
 
         fetchTokenAndInitGame();
-    }, [level]);
+    }, []);
 
     useEffect(() => {
-        const init = async async => {
+        const init = async () => {
             console.log('开始渲染');
             // Fetch game data using the token
             const gameDataResponse = await fetch(`${apiUrl}/game/tile-matching/init/level`, {
@@ -90,10 +80,12 @@ const TileMatching = () => {
             console.log(gameData);
             setLevelName(`Level ${level} : ${gameData.name}`);
             setTimer(gameData.time);
-            setBoard(gameData.matrix);
+            setBoard(gameData.matrix || []); // 确保 gameData.matrix 是一个数组
+        };
+        if (playerToken) {
+            init();
         }
-        init();
-    }, [level, playerToken]);
+    }, [level]);
 
     useEffect(() => {
         let timerInterval = null;
@@ -108,22 +100,22 @@ const TileMatching = () => {
     const handleTileClick = (i, j) => {
         const clickedNumber = board[i][j];
         if (!selectedTile) {
-            setSelectedTile({row: i, col: j});
+            setSelectedTile({ row: i, col: j });
         } else if (selectedCoords && selectedCoords.row === i && selectedCoords.col === j) {
             setSelectedTile(null);
         } else {
             const requestData = {
                 p1: selectedCoords,
-                p2: {row: i, col: j},
-                matrix: board
+                p2: { row: i, col: j },
+                matrix: board,
             };
             fetch(`${apiUrl}/game/tile-matching/link`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Token-Player': playerToken
+                    'Token-Player': playerToken,
                 },
-                body: JSON.stringify(requestData)
+                body: JSON.stringify(requestData),
             })
                 .then(response => response.json())
                 .then(data => {
@@ -135,36 +127,37 @@ const TileMatching = () => {
                             setLevel(level + 1);
                             break;
                         case Status.GAME_WIN.code:
-                            alert("您已通关！！");
+                            alert('您已通关！！');
                             setLevel(1);
                             break;
                         case Status.GAME_OVER.code:
-                            alert("您已失败（生命<0）！！");
+                            alert('您已失败（生命<0）！！');
                             setLevel(1);
                             break;
                         case Status.CONTINUE.code:
-                            // eslint-disable-next-line no-unused-expressions
-                            data.match === 1
-                                ? (console.log('正常消除'),
-                                    setLives(prevLife => data.life),
-                                    setHintCoords([]),
-                                    setTimer(prevTimer => (prevTimer + 1 <= 100 ? prevTimer + 1 : 100)),
-                                    setBoard(data.matrix || board.map((row, rowIndex) =>
-                                        row.map((cell, colIndex) =>
-                                            data.path.some(coord => coord.row === rowIndex && coord.col === colIndex) ? 0 : cell
-                                        )
-                                    )),
-                                    setSelectedTile(null))
-                                : setSelectedTile({row: i, col: j});
+                            if (data.match === 1) {
+                                console.log('正常消除');
+                                setLives(data.life);
+                                setHintCoords([]);
+                                setTimer(prevTimer => (prevTimer + 1 <= 100 ? prevTimer + 1 : 100));
+                                setBoard(data.matrix || board.map((row, rowIndex) =>
+                                    row.map((cell, colIndex) =>
+                                        data.path.some(coord => coord.row === rowIndex && coord.col === colIndex) ? 0 : cell
+                                    )
+                                ));
+                                setSelectedTile(null);
+                            } else {
+                                setSelectedTile({ row: i, col: j });
+                            }
                             break;
                         default:
-                            setSelectedTile({row: i, col: j});
+                            setSelectedTile({ row: i, col: j });
                             break;
                     }
                 })
                 .catch(error => console.error('Error sending tiles to backend:', error));
         }
-        setSelectedCoords({row: i, col: j});
+        setSelectedCoords({ row: i, col: j });
     };
 
     const handleHintButtonClick = () => {
@@ -172,13 +165,13 @@ const TileMatching = () => {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Token-Player': playerToken
-            }
+                'Token-Player': playerToken,
+            },
         })
             .then(response => response.json())
             .then(data => {
                 console.log('后端返回的数据:', data);
-                setHints(prevTips => data.tips);
+                setHints(data.tips);
                 setHintCoords([data.p1, data.p2]); // 更新提示返回的位置
             })
             .catch(error => console.error('Error sending request:', error));
@@ -210,7 +203,7 @@ const TileMatching = () => {
                                 <div
                                     key={`${i}-${j}`}
                                     className={`tile ${selectedTile && selectedTile.row === i && selectedTile.col === j ? 'selected' : ''} ${isHint ? 'hint' : ''}`}
-                                    style={{backgroundImage: `url('textures/${number}.png')`}}
+                                    style={{ backgroundImage: `url('textures/${number}.png')` }}
                                     onClick={() => handleTileClick(i, j)}
                                     data-row={i}
                                     data-col={j}
