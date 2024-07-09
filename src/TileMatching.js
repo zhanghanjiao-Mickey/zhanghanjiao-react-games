@@ -12,6 +12,7 @@ import {apiUrl, Status} from './config';
 // const images = importAll(require.context('./textures', false, /\.(png|jpe?g|svg)$/));
 
 const TileMatching = () => {
+    const [globalToken, setGlobalToken] = useState('');
     const [levelName, setLevelName] = useState('关卡名称');
     const [lives, setLives] = useState(0);
     const [hints, setHints] = useState(0);
@@ -21,7 +22,7 @@ const TileMatching = () => {
     const [selectedCoords, setSelectedCoords] = useState(null);
     const [playerToken, setPlayerToken] = useState("");
     const [level, setLevel] = useState(1);
-
+    const [hintCoords, setHintCoords] = useState([]); // 新增状态用于存储提示返回的位置
 
     useEffect(() => {
         const fetchTokenAndInitGame = async () => {
@@ -34,12 +35,26 @@ const TileMatching = () => {
                         // Add any other headers needed for login
                     },
                 });
-                const token = await tokenResponse.text();
+                const responseData = await tokenResponse.json(); // 解析响应体为 JSON 数据
+                const token = responseData.token; // 获取 token 属性
+                console.log('tokenResponse', tokenResponse);
                 console.log('Token fetched:', token);
                 setPlayerToken(token); // Save token to state
 
+                const gamePlayerResponse = await fetch(`${apiUrl}/game/tile-matching/init/player`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Token-Player': token,
+                    },
+                });
+                const playerData = await gamePlayerResponse.json();
+                console.log('playerData:', playerData);
+                setLives(playerData.life);
+                setHints(playerData.tips);
+
                 // Fetch game data using the token
-                const gameDataResponse = await fetch(`${apiUrl}/game/tile-matching/level/${level}/init`, {
+                const gameDataResponse = await fetch(`${apiUrl}/game/tile-matching/init/level`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -49,10 +64,9 @@ const TileMatching = () => {
                 const gameData = await gameDataResponse.json();
                 console.log(gameData);
                 setLevelName(`Level ${level} : ${gameData.name}`);
-                setLives(gameData.life);
-                setHints(gameData.tips);
                 setTimer(gameData.time);
                 setBoard(gameData.matrix);
+
             } catch (error) {
                 console.error('Error fetching token or game data:', error);
             }
@@ -60,6 +74,26 @@ const TileMatching = () => {
 
         fetchTokenAndInitGame();
     }, [level]);
+
+    useEffect(() => {
+        const init = async async => {
+            console.log('开始渲染');
+            // Fetch game data using the token
+            const gameDataResponse = await fetch(`${apiUrl}/game/tile-matching/init/level`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Token-Player': playerToken,
+                },
+            });
+            const gameData = await gameDataResponse.json();
+            console.log(gameData);
+            setLevelName(`Level ${level} : ${gameData.name}`);
+            setTimer(gameData.time);
+            setBoard(gameData.matrix);
+        }
+        init();
+    }, [level, playerToken]);
 
     useEffect(() => {
         let timerInterval = null;
@@ -93,32 +127,39 @@ const TileMatching = () => {
             })
                 .then(response => response.json())
                 .then(data => {
-                    console.log('连接后');
+                    console.log('link接口返回数据：');
                     console.log(data);
-                    if (data.status === Status.CLEARED.code) {
-                        if(level < 10) {
+                    switch (data.status) {
+                        case Status.CLEARED.code:
                             alert(`恭喜您通过第 ${level} 关！！`);
                             setLevel(level + 1);
-                        }else{
+                            break;
+                        case Status.GAME_WIN.code:
                             alert("您已通关！！");
-                        }
-                    } else if (!data.path || data.path.length === 0 || clickedNumber !== board[selectedCoords.row][selectedCoords.col]) {
-                        setSelectedTile({row: i, col: j});
-                    } else {
-                        setTimer(prevTimer => (prevTimer + 1 <= 100 ? prevTimer + 1 : 100));
-                        let newBoard = [...board];
-                        // data.path.forEach(coord => {
-                        //     newBoard[coord.row][coord.col] = 0;
-                        // });
-                        if (data.matrix) {
-                            newBoard = data.matrix;
-                        } else {
-                            data.path.forEach(coord => {
-                                newBoard[coord.row][coord.col] = 0;
-                            });
-                        }
-                        setBoard(newBoard);
-                        setSelectedTile(null);
+                            setLevel(1);
+                            break;
+                        case Status.GAME_OVER.code:
+                            alert("您已失败（生命<0）！！");
+                            setLevel(1);
+                            break;
+                        case Status.CONTINUE.code:
+                            // eslint-disable-next-line no-unused-expressions
+                            data.match === 1
+                                ? (console.log('正常消除'),
+                                    setLives(prevLife => data.life),
+                                    setHintCoords([]),
+                                    setTimer(prevTimer => (prevTimer + 1 <= 100 ? prevTimer + 1 : 100)),
+                                    setBoard(data.matrix || board.map((row, rowIndex) =>
+                                        row.map((cell, colIndex) =>
+                                            data.path.some(coord => coord.row === rowIndex && coord.col === colIndex) ? 0 : cell
+                                        )
+                                    )),
+                                    setSelectedTile(null))
+                                : setSelectedTile({row: i, col: j});
+                            break;
+                        default:
+                            setSelectedTile({row: i, col: j});
+                            break;
                     }
                 })
                 .catch(error => console.error('Error sending tiles to backend:', error));
@@ -137,28 +178,38 @@ const TileMatching = () => {
             .then(response => response.json())
             .then(data => {
                 console.log('后端返回的数据:', data);
+                setHints(prevTips => data.tips);
+                setHintCoords([data.p1, data.p2]); // 更新提示返回的位置
             })
             .catch(error => console.error('Error sending request:', error));
     };
+
+    useEffect(() => {
+        console.log('Lives changed:', lives);
+    }, [lives]);
+
+    useEffect(() => {
+        console.log('Hints changed:', hints);
+    }, [hints]);
 
     return (
         <div className="App">
             <header className="header">
                 <div id="level-name">{levelName}</div>
-                <div id="lives">生命: <span id="lives-value">{lives}</span></div>
-                <div id="hints">提示: <span id="hints-value">{hints}</span></div>
-                <div id="timer">时间条: <span id="timer-value">{timer}</span></div>
+                <div id="lives">生命: {lives}</div>
+                <div id="hints">提示: {hints}</div>
+                <div id="timer">时间条: {timer}</div>
                 <button id="hint-button" onClick={handleHintButtonClick}>提示</button>
             </header>
             <div className="board" id="board">
                 {board.map((row, i) =>
                     row.map((number, j) => {
-                        // 排除 i 和 j 等于 0 或等于 row.length - 1 的情况
                         if (i !== 0 && i !== board.length - 1 && j !== 0 && j !== row.length - 1) {
+                            const isHint = hintCoords.some(coord => coord.row === i && coord.col === j); // 判断是否是提示返回的位置
                             return (
                                 <div
                                     key={`${i}-${j}`}
-                                    className={`tile ${selectedTile && selectedTile.row === i && selectedTile.col === j ? 'selected' : ''}`}
+                                    className={`tile ${selectedTile && selectedTile.row === i && selectedTile.col === j ? 'selected' : ''} ${isHint ? 'hint' : ''}`}
                                     style={{backgroundImage: `url('textures/${number}.png')`}}
                                     onClick={() => handleTileClick(i, j)}
                                     data-row={i}
@@ -170,7 +221,6 @@ const TileMatching = () => {
                         }
                     })
                 )}
-
             </div>
         </div>
     );

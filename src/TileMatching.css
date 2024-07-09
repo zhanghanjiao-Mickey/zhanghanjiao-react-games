@@ -42,3 +42,7 @@ body {
 .tile.selected {
   border-color: #000;
 }
+
+.tile.hint {
+    border: 2px solid red;
+}
