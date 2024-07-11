@@ -3,7 +3,6 @@ import './TileMatching.css';
 import { apiUrl, Status } from './config';
 
 const TileMatching = () => {
-    const [globalToken, setGlobalToken] = useState('');
     const [levelName, setLevelName] = useState('关卡名称');
     const [lives, setLives] = useState(0);
     const [hints, setHints] = useState(0);
@@ -80,6 +79,8 @@ const TileMatching = () => {
             console.log(gameData);
             setLevelName(`Level ${level} : ${gameData.name}`);
             setTimer(gameData.time);
+            setLives(gameData.life);
+            setHints(gameData.tips);
             setBoard(gameData.matrix || []); // 确保 gameData.matrix 是一个数组
         };
         if (playerToken) {
